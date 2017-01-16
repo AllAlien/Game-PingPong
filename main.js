@@ -1,8 +1,15 @@
+//inplementação de jquery
+
 canvas = document.querySelector("canvas");
 ctx =  canvas.getContext("2d");
 
 var mvLeft = mvRigth=false, speed=4, deslocaY=6, deslocaX = -3, bingoCpu=0, bingoHuman=0, theEnd=false;
-const RIGTH=39, LEFT=37;
+const RIGTH=39, LEFT=37, DOWN =40, ENTER=13, ESC=27;
+
+///sistema de cores 
+
+key=0;
+
 
 var raquete_one = {
 	posY: 570,
@@ -98,7 +105,7 @@ function update(){
 
 
 function moveDown(e){
-	var key = e.keyCode;
+	 key = e.keyCode;
 
 	switch (key){
 		case LEFT:
@@ -112,7 +119,7 @@ function moveDown(e){
 }
 
 function moveup(e){ 
-		var key = e.keyCode;
+		 key = e.keyCode;
 		switch (key){
 			case LEFT:
 				mvLeft = false;
@@ -181,18 +188,42 @@ function gameOver (){
 	theEnd =true;	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 //=========gameover=================\\	
-	ctx.fillStyle = "#fff";
+	ctx.fillStyle = '#f00';
 	ctx.font = "40px Stencil";
 	ctx.fillText("Game Over", 80, 200);
 //==========restart================\\		
-	ctx.fillStyle = "#fff";
-	ctx.font = "30px Stencil";
-	ctx.fillText("Restart", 120, 230);
+	ctx.fillStyle = '#0f0';
+	ctx.font = "20px Stencil";
+	ctx.fillText("Press 'Enter' for restart", 40, 230);
 //============exit=================\\
-	ctx.fillStyle = "#fff";
-	ctx.font = "30px Stencil";
-	ctx.fillText("Exit", 150, 260);		
+	ctx.fillStyle = '#00f';
+	ctx.font = "20px Stencil";
+	ctx.fillText("Press 'Esc' for exit", 80, 260);
+	sound();		
 	}
+
+//reinicia o jogo
+	switch(key){
+		case ENTER:
+			location.reload();
+			break;
+		case ESC:
+			location.reload();
+			break;	
+	}
+
+	
+
+}
+
+function sound (){
+	var div_pai = document.getElementById("som");
+	var audio = document.createElement("audio");
+	audio.src = "sons/gameover.mp3";
+	audio.autoplay = "autoplay";
+	audio.loop = "loop";
+	alert(div_pai)
+	div_pai.appendChild(audio);
 
 }
 loop();
