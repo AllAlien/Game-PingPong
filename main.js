@@ -3,7 +3,7 @@
 canvas = document.querySelector("canvas");
 ctx =  canvas.getContext("2d");
 
-var mvLeft = mvRigth=false, speed=4, deslocaY=6, deslocaX = -3, bingoCpu=0, bingoHuman=0, theEnd=false;
+var mvLeft = mvRigth=false, speed=4, deslocaY=8, deslocaX = -5, bingoCpu=0, bingoHuman=0, theEnd=false;
 const RIGTH=39, LEFT=37, DOWN =40, ENTER=13, ESC=27;
 
 ///sistema de cores 
@@ -65,6 +65,7 @@ function update(){
 			bola.posX += deslocaX;
 		if(bateuRaqueteOne() || bateuRaqueteTwo()){
 			deslocaY *= -1;
+			soundBatida();
 		}
 		
 		cpuMove();
@@ -78,6 +79,7 @@ function update(){
 			bola.posY = raquete_two.height +20;
 			bingoCpu++;
 			gameOver();
+			
 
 		}
 		
@@ -135,9 +137,12 @@ function moveup(e){
 
 
 function loop(){
+	if (theEnd == false){ 
 	window.requestAnimationFrame(loop, canvas);
 	update();
 	render();
+
+	}
 
 }
 
@@ -185,7 +190,6 @@ function gameOver (){
 
 	if (bingoCpu == 7){ 
 
-	theEnd =true;	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 //=========gameover=================\\	
 	ctx.fillStyle = '#f00';
@@ -195,36 +199,74 @@ function gameOver (){
 	ctx.fillStyle = '#0f0';
 	ctx.font = "20px Stencil";
 	ctx.fillText("Press 'Enter' for restart", 40, 230);
-//============exit=================\\
-	ctx.fillStyle = '#00f';
-	ctx.font = "20px Stencil";
-	ctx.fillText("Press 'Esc' for exit", 80, 260);
-	sound();		
-	}
 
-//reinicia o jogo
-	switch(key){
-		case ENTER:
-			location.reload();
-			break;
-		case ESC:
-			location.reload();
-			break;	
-	}
+	soundGameover();
 
+
+
+	theEnd =true;	
+
+
+	}
 	
 
 }
 
-function sound (){
+function soundGameover (){
 	var div_pai = document.getElementById("som");
 	var audio = document.createElement("audio");
 	audio.src = "sons/gameover.mp3";
 	audio.autoplay = "autoplay";
 	audio.loop = "loop";
-	alert(div_pai)
 	div_pai.appendChild(audio);
 
+}
+
+function soundBatida(){
+	var div_pai = document.getElementById("som");
+	var audio2 = document.createElement("audio");
+	audio2.src = "sons/batida.wav";
+	audio2.autoplay = "autoplay";
+	div_pai.appendChild(audio2);
+}
+
+window.addEventListener("keydown", restart, false);
+function restart (e){
+		var key = e.keyCode;
+		//reinicia o jogo
+
+		switch(key){
+			case ENTER:
+				location.reload();
+				break;
+			case ESC:
+				location.reload();
+				break;	
+		}
+
+}
+
+function gameStart (){
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = '#f00';
+	ctx.font = '30px Stencil';
+	ctx.fillText('Enter for  Start', 80, 220);
+	ctx.fillStyle = '#0f0';
+	ctx.fillText('PgUp for   Help', 80, 260);
+	ctx.fillStyle = '#00f';
+	ctx.fillText('Pg dn for  Nivel', 80, 300);
+
+	switch (key){
+		case ENTER:
+			loop();
+			break;
+		case PGUP:
+			help();
+			break;
+		case PGDOWN:
+			nivel();
+			break;				
+	}
 }
 loop();
 
